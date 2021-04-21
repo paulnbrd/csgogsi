@@ -1,10 +1,9 @@
 # CS:GO Game State Integration (csgogsi)
 By PØL1
 
-- [CS:GO Game State Integration (csgogsi)](#csgo-game-state-integration-csgogsi)
-  - [Installation](#installation)
-  - [Documentation](#documentation)
-  - [License](#license)
+ - [Installation](#installation)
+ - [Documentation](#documentation)
+ - [License](#license)
 
 ## Installation
 
