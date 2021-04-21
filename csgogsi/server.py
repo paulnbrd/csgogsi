@@ -79,7 +79,7 @@ class Server:
 
         self.callbacks = {}
 
-        self.disable_on_start_event_triggering: bool = False  # Set it to True before receiving data from CS:GO to disable event triggering at the launch
+        self.disable_on_start_event_triggering: bool = True  # Set it to True before receiving data from CS:GO to disable event triggering at the launch
         self.disable_log: bool = False
         self._first_time: bool = True
 
