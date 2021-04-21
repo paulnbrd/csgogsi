@@ -12,4 +12,4 @@ Using pip
 Not available yet
 ```
 
-And you are done ! Ready to use csgogsi ? Click [here](get-started.md) !
+And you are done ! Ready to use csgogsi ? Click [here](get-started) to get started !
