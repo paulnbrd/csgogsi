@@ -1,0 +1,6 @@
+README.md
+setup.py
+csgogsi/csgogsi.egg-info/PKG-INFO
+csgogsi/csgogsi.egg-info/SOURCES.txt
+csgogsi/csgogsi.egg-info/dependency_links.txt
+csgogsi/csgogsi.egg-info/top_level.txt
