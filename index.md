@@ -3,8 +3,8 @@
 Welcome to the **CS:GO GSI** documentation !
 
 Follow these links to get started
-- [Installation](installation.md)
-- [Get started](get-started.md)
+- [Installation](installation)
+- [Get started](get-started)
 
 # License
 MIT, author: POL1
