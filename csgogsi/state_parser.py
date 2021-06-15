@@ -6,12 +6,14 @@ from dataclasses import dataclass
 import typing
 import csgogsi.constants as constants
 
+
 @dataclass
 class MapTeam:
     score: int
     consecutive_round_losses: int
     timeouts_remaining: int
     matches_won_this_series: int
+
 
 @dataclass
 class Map:
@@ -26,11 +28,13 @@ class Map:
     current_spectators: int
     souvenirs_total: int
 
+
 @dataclass
 class Bomb:
     state: str
     position: tuple
     player: int
+
 
 @dataclass
 class PlayerMatchStats:
@@ -39,6 +43,7 @@ class PlayerMatchStats:
     deaths: int
     mvps: int
     score: int
+
 
 @dataclass
 class PlayerState:
@@ -54,6 +59,7 @@ class PlayerState:
     round_totaldmg: int
     equip_value: int
 
+
 @dataclass
 class PlayerWeapon:
     name: str
@@ -63,6 +69,7 @@ class PlayerWeapon:
     ammo_clip: int
     ammo_clip_max: int
     ammo_reserve: int
+
 
 @dataclass
 class ObservedPlayer:
@@ -79,15 +86,18 @@ class ObservedPlayer:
     position: typing.Tuple[int]
     forward: typing.Tuple[int]
 
+
 @dataclass
 class Round:
     phase: str
     bomb: str
     win_team: str
 
+
 @dataclass
 class EndedRound:
     win_cause: str
+
 
 @dataclass
 class Provider:
@@ -97,8 +107,10 @@ class Provider:
     steamid: int
     timestamp: int
 
+
 @dataclass
 class Payload:
+    raw_payload: dict
     provider: Provider
     played_map: Map
     current_round: Round
@@ -108,6 +120,8 @@ class Payload:
 
 
 CURRENT_PAYLOAD = constants.NULL
+
+
 def get_payload_attr(*attrs, default=constants.NULL):
     global CURRENT_PAYLOAD
     if CURRENT_PAYLOAD != constants.NULL and CURRENT_PAYLOAD is not None:
@@ -125,6 +139,7 @@ def get_payload_attr(*attrs, default=constants.NULL):
     else:
         return default
 
+
 def parse_payload(payload: dict):
     global CURRENT_PAYLOAD
     CURRENT_PAYLOAD = payload
@@ -135,7 +150,7 @@ def parse_payload(payload: dict):
         round_wins = [i for i in _round_wins.values()]
     else:
         round_wins = []
-    
+
     mode = get_payload_attr("map", "mode")
     name = get_payload_attr("map", "name")
     phase = get_payload_attr("map", "phase")
@@ -158,15 +173,15 @@ def parse_payload(payload: dict):
     souvenirs_total = get_payload_attr("map", "souvenirs_total")
 
     played_map = Map(round_wins=round_wins,
-                    mode=mode,
-                    name=name,
-                    phase=phase,
-                    round_no=round_no,
-                    team_ct=team_ct,
-                    team_t=team_t,
-                    num_matches_to_win_series=num_matches_to_win_series,
-                    current_spectators=current_spectators,
-                    souvenirs_total=souvenirs_total)
+                     mode=mode,
+                     name=name,
+                     phase=phase,
+                     round_no=round_no,
+                     team_ct=team_ct,
+                     team_t=team_t,
+                     num_matches_to_win_series=num_matches_to_win_series,
+                     current_spectators=current_spectators,
+                     souvenirs_total=souvenirs_total)
     current_round = Round(
         phase=get_payload_attr("round", "phase"),
         bomb=get_payload_attr("round", "bomb", default=constants.BOMB_CARRIED),
@@ -234,8 +249,8 @@ def parse_payload(payload: dict):
         forward=player_forward
     )
 
-    allplayers = constants.NOT_IMPLEMENTED_YET  # Honestly, is it useful ?
-    
+    allplayers = constants.NOT_IMPLEMENTED_YET  # Honestly, is it useful ? Yes. I'm going to implement it soon (maybe)
+
     bomb_pos = get_payload_attr("bomb", "position")
     if bomb_pos != constants.NULL:
         try:
@@ -247,7 +262,7 @@ def parse_payload(payload: dict):
         position=bomb_pos,
         player=get_payload_attr("bomb", "player")
     )
-    
+
     provider = Provider(
         name=get_payload_attr("provider", "name"),
         appid=get_payload_attr("provider", "appid"),
@@ -256,5 +271,6 @@ def parse_payload(payload: dict):
         timestamp=get_payload_attr("provider", "timestamp")
     )
 
-    payload = Payload(provider=provider, played_map=played_map, current_round=current_round, player=player, allplayers=allplayers, bomb=bomb)
+    payload = Payload(raw_payload=payload, provider=provider, played_map=played_map, current_round=current_round, player=player,
+                      allplayers=allplayers, bomb=bomb)
     return payload
