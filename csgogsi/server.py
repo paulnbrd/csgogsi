@@ -7,13 +7,16 @@ from dataclasses import fields
 from werkzeug.exceptions import HTTPException
 import traceback
 
+
 def disable_log():
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
 
+
 def enable_log():
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.DEBUG)
+
 
 disable_log()
 
@@ -21,14 +24,14 @@ ADDR = "127.0.0.1"
 PORT = 3000
 TOKEN = "CCWJu64ZV3JHDT8hZc"
 
-
 if __name__ == "__main__":
     """ If you run this script directly, you can see what CS:GO has sent in 'raw' mode """
-    
+
     app = Flask(__name__)
 
     last_infos = None
     debug = True
+
 
     def setup():
 
@@ -46,15 +49,18 @@ if __name__ == "__main__":
                 return_value += "<br /><br />"
                 key_list = list(last_infos.keys())
                 for key in key_list:
-                    return_value += "<a href=\"/get_key?key="+str(key)+"\" target=\"_BLANK\">"+key+"</a><br />"
+                    return_value += "<a href=\"/get_key?key=" + str(key) + "\" target=\"_BLANK\">" + key + "</a><br />"
                 return return_value
 
             @app.route("/get_key")
             def get_key():
                 values = request.args
                 return json.dumps(last_infos[str(values["key"])], indent=4)
+
+
     setup()
     app.run(debug=False, host=ADDR, port=PORT)
+
 
 class Server:
     def __init__(self, addr: str = ADDR, port: int = PORT, token: str = TOKEN):
@@ -94,7 +100,7 @@ class Server:
     @staticmethod
     def copy_payload(payload: state_parser.Payload) -> state_parser.Payload:
         """ Util to duplicate a payload (and watch for changes) """
-        new_payload = state_parser.Payload(None, None, None, None, None, None)
+        new_payload = state_parser.Payload(None, None, None, None, None, None, None)
         for field in fields(state_parser.Payload):
             setattr(new_payload, field.name, getattr(payload, field.name))
         return new_payload
@@ -108,7 +114,7 @@ class Server:
 
             if self.payload is not None:
                 self.old_payload = self.copy_payload(self.payload)
-            
+
             self.payload = state_parser.parse_payload(self.last_values)
 
             if self._first_time is True:
@@ -120,7 +126,7 @@ class Server:
                 event_triggered = False
                 old_value = None
                 new_value = None
-                
+
                 for call in callback_trigger_elem:
                     try:
                         if old_value is None and new_value is None:
@@ -146,10 +152,12 @@ class Server:
 
     def add_observer(self, *args):
         """ Decorator to watch for payload change """
+
         def wrapper(func):
             if not args in self.callbacks.keys():
                 self.callbacks[args] = []
             self.callbacks[args].append(func)
+
         return wrapper
 
     def run(self, blocking: bool = True, daemon: bool = True):
